@@ -18,14 +18,24 @@ var showHideOverlay = function () {
 
 showHideOverlay();
 
-
 var getRandomLikes = function (min, max) {
   return Math.floor(Math.random() * (max + 1 - min) + min);
 };
 
 
-var getRandomComment = function (min, max) {
-  return Math.floor(Math.random() * (max + 1 - min) + min);
+var getRandomComment = function (array) {
+  var commentsNumber = [];
+  var firstComment = array[Math.floor(Math.random() * array.length)];
+  commentsNumber[0] = firstComment;
+  var oneOrTwo = Math.floor(1 + Math.random() * 2);
+  if (oneOrTwo === 2) {
+    var secondComment = array[Math.floor(Math.random() * array.length)];
+    while (secondComment === firstComment) {
+      secondComment = array[Math.floor(Math.random() * array.length)];
+    }
+  }
+  commentsNumber[1] = secondComment;
+  return commentsNumber;
 };
 
 var photoElement = [];
@@ -34,12 +44,12 @@ for (var i = 0; i <= 24; i++) {
   var photo = {
     url: 'photos/' + (i + 1) + '.jpg',
     likes: getRandomLikes(15, 200),
-    comments: comments[getRandomComment(0, comments.length - 1)]
+    comments: getRandomComment(comments)
   };
   photoElement[i] = photo;
 }
 
-var someFunction = function (array) {
+var getTemplate = function (array) {
   var fragment = document.createDocumentFragment();
   var template = document.querySelector('#picture-template').content;
   for (i = 0; i < photoElement.length; i++) {
@@ -52,4 +62,4 @@ var someFunction = function (array) {
   document.querySelector('.pictures').appendChild(fragment);
 };
 
-someFunction(photoElement);
+getTemplate(photoElement);
